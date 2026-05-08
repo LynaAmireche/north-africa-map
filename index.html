@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>North Africa's DNA Makeup</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    background: #add8e6;
+    color: #000000;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    text-align: center;
+    padding: 20px 20px 12px;
+    background: #add8e6;
+    border-bottom: 2px solid #000;
+  }
+
+  header h1 {
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-weight: 700;
+    color: #000080;
+    text-transform: uppercase;
+  }
+
+  header p {
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    font-size: 1rem;
+    color: #000000;
+    margin-top: 6px;
+  }
+
+  #layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  #map-panel {
+    flex: 1 1 65%;
+    position: relative;
+    background: #add8e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  #map-panel img#base-map {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+  }
+
+  #hotspot-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+  }
+
+  .hotspot {
+    pointer-events: all;
+    cursor: pointer;
+  }
+
+  .hotspot circle {
+    fill: #cc0000;
+    stroke: #000000;
+    stroke-width: 0.5;
+    transition: fill 0.2s;
+  }
+
+  .hotspot:hover circle,
+  .hotspot.active circle {
+    fill: #000000;
+  }
+
+  #sidebar {
+    flex: 0 0 360px;
+    background: #c5e8f5;
+    border-left: 2px solid #000;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 20px 18px;
+    gap: 16px;
+  }
+
+  #btn-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .place-btn {
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 2px solid #000000;
+    cursor: pointer;
+    text-align: left;
+    transition: opacity 0.2s;
+    color: #ffffff;
+  }
+
+  .place-btn:nth-child(odd)  { background: #000000; }
+  .place-btn:nth-child(even) { background: #cc0000; }
+
+  .place-btn:hover { opacity: 0.78; }
+  .place-btn.active { outline: 3px solid #000080; outline-offset: 2px; }
+
+  #story-card {
+    background: #ffffff;
+    border: 2px solid #000000;
+    border-radius: 8px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  #story-card h2 {
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #000080;
+    border-bottom: 1px solid #000;
+    padding-bottom: 8px;
+    line-height: 1.4;
+  }
+
+  #story-card p {
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: #000000;
+    white-space: pre-wrap;
+  }
+
+  #placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 10px;
+    text-align: center;
+    color: #333;
+    font-size: 0.9rem;
+  }
+
+  #placeholder .icon { font-size: 2rem; }
+
+  @media (max-width: 680px) {
+    #layout { flex-direction: column; }
+    #sidebar { flex: none; border-left: none; border-top: 2px solid #000; }
+    #map-panel { min-height: 45vh; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>North Africa's DNA Makeup</h1>
+  <p>Click on any button to see the full genetic makeup of the population of the city</p>
+</header>
+
+<div id="layout">
+
+  <div id="map-panel">
+    <img id="base-map" src="north-africa-map.jpg" alt="North Africa map">
+    <svg id="hotspot-overlay" viewBox="0 0 100 100" preserveAspectRatio="none">
+
+      <!-- Carthage / Tunisia - Tunis sits at ~55% across, ~9% down -->
+      <g class="hotspot" data-id="carthage" onclick="showStory('carthage')">
+        <circle cx="55" cy="9" r="1.5"/>
+      </g>
+
+      <!-- Kabylie, North Algeria - NE Algeria coast ~46%, 15% -->
+      <g class="hotspot" data-id="kabylie" onclick="showStory('kabylie')">
+        <circle cx="46" cy="15" r="1.5"/>
+      </g>
+
+      <!-- Luxor, Egypt - labeled on map ~88%, 36% -->
+      <g class="hotspot" data-id="luxor" onclick="showStory('luxor')">
+        <circle cx="88" cy="36" r="1.5"/>
+      </g>
+
+      <!-- Djanet, South Algeria / Sahara ~52%, 52% -->
+      <g class="hotspot" data-id="djanet" onclick="showStory('djanet')">
+        <circle cx="52" cy="52" r="1.5"/>
+      </g>
+
+      <!-- Fez, Morocco - labeled on map ~27%, 17% -->
+      <g class="hotspot" data-id="fez" onclick="showStory('fez')">
+        <circle cx="27" cy="17" r="1.5"/>
+      </g>
+
+    </svg>
+  </div>
+
+  <div id="sidebar">
+
+    <div id="btn-panel">
+      <button class="place-btn" onclick="showStory('carthage')">Carthage, Tunisia</button>
+      <button class="place-btn" onclick="showStory('kabylie')">Kabylie, Algeria</button>
+      <button class="place-btn" onclick="showStory('luxor')">Luxor, Egypt</button>
+      <button class="place-btn" onclick="showStory('djanet')">Djanet, Algeria</button>
+      <button class="place-btn" onclick="showStory('fez')">Fez, Morocco</button>
+    </div>
+
+    <div id="story-card">
+      <div id="placeholder">
+        <div class="icon">🗺️</div>
+        <p>Click a button or a dot on the map to read the story</p>
+      </div>
+      <h2 id="story-title" style="display:none"></h2>
+      <p id="story-text"></p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const stories = {
+  carthage: {
+    title: "Carthage, The Capital of Africa",
+    text: `To the current Western consciousness, you would probably be laughed at if you asked, "What is the capital of Africa?" Do you mean Africa, the continent? Or maybe you forgot the south and mean South Africa? If that's your question, then the answer is easy: Johannesburg!
+
+What now seems like a ridiculous question was once a reflection of what Europeans considered Africa to be: Carthage. In fact, the name Africa was derived from the name Afri, which was the tribe of people that inhabited west Carthage.
+
+However, Carthage was not just one city. It was many worlds layered together. Phoenicians founded it. Africans shaped it. Romans rebuilt it. It changed names, but never stopped existing. The people who call Carthage home today are Tunisians from Carthage, who were previously called Punic people, which according to a study published by Nature, were genetically diverse with almost no Phoenician ancestry. So we might ask: how could the people that founded the city not have any connection or continuity with the people who live in it now?`
+  },
+  kabylie: {
+    title: "Yennayer 2975! Kabylie, Algeria",
+    text: `Sitting around the fire, Tiziri and Aghiles listen to their grandma as she tells them the story of Yennayer, the first month of the new year. L'Ajouza, the old lady who mocked winter and showed ingratitude for its giving, was turned into stone by a storm, says the grandma as she watches her grandkids' eyes fill with fear. Because of that, the grandma continues, January, or Yennayer, steals a day from February as punishment, and this is why we have a short February. This is, my kids, because we shall respect the rules of nature and not rush change, and only then will it give us its blessings.
+
+According to Amazigh cultural tradition, Yennayer traces its origin to 950 BCE, when the Libyan-Amazigh king Shoshenq I ascended to the throne of pharaonic Egypt. Yennayer remains a tradition that celebrates the history of the Imazighen people and stands as a reminder that they built civilizations that lived alongside and outlived ancient Egypt. Today, this holiday is celebrated all across North Africa through food-sharing ceremonies, dance, music, and folklore-sharing circles.`
+  },
+  luxor: {
+    title: "Luxor Baladna!, Egypt",
+    text: `"Luxor baladna ela el khatt!!" sings an old wrinkled man as he drums, while a young lady moves her body along a small wooden stick to the rhythm of the drum. She moves her hair in a circling motion, struggling to fit all of her ringlets in one hand, and suddenly flips her body upside down as the rhythm intensifies, surrounded by the cheers of everyone around her. Her belly faces the sky and her face stares to the side as she smiles at the audience.
+
+Samar inherited this dance from her family and grew up watching the women around her perform it, so it felt natural for her to do the same. However, what Samar doesn't know is that she is performing a dance as ancient as the 13th century BC, documented on ostraka from the Old Kingdom. The dance was often performed during celebrations, feasts, and religious festivals in ancient Egypt and is still a common cultural practice in many Egyptian cities today!`
+  },
+  djanet: {
+    title: "How to make Tea, Touareg, Algeria",
+    text: `Aksil has been a tourist guide in Djanet for 15 years now. His favorite part of the job is to teach people how to make traditional mint tea. First he rinses the fresh spearmint, shaking off dust and desert sand, then mentions how the Tuareg people have always moved across borders in the Sahara, refusing to be boxed in by them, just like their culture isn't fixed in one place. He adds gunpowder green tea and water into a small pot and brings it to a boil, saying how tea became a shared ritual across North Africa, something that quietly ties different African cultures together even when politics tries to separate them. Once it boils, he turns off the heat, adds orange blossom water and mint, and lets it steep, explaining how even small ingredients traveling through trade routes carry pieces of African unity in them. After a few minutes, he tastes it, pours it out and back into the pot to "wake it up," saying the Tuareg have always valued patience and rhythm, like desert life itself. Finally he strains it from high above so it foams, a little performance, and smiles saying this is the same tea you'll find from Algeria to Morocco to Mali, proof that culture flows smoother than borders ever could.`
+  },
+  fez: {
+    title: "Fez and its layers, Morocco",
+    text: `As Amina sits in a café in the new city of Fez, She almost feels like she is in France, but all she hears is Darija, a Moroccan dialect blending Arabic, Tamazight, French, and Spanish.
+
+She dreams of going to Europe one day, yet everything around her already feels strangely familiar, shaped by French colonial history still visible in the city's layout. She then leaves the cafe for a walk, she reaches the great mosque of Fez, whose architecture carries the spirit of Al-Andalus, the Muslim civilization of medieval Spain known for its rich cultural and artistic heritage. Amina has always dreamed of its spirituality, a legacy tied to the migration of Andalusian Muslims to Morocco, which deeply influenced its architecture and identity.
+
+Back home, she kisses her mother on the cheeks: "Azul a yemma." She sits in the living room with its Amazigh seating and looks at her grandmother's tattooed face portrait, wondering who she is beneath all these layered identities.
+
+The TV plays the news in Arabic, and a reporter says: "How do you expect us to define all of our histories in one rigid identity?"`
+  }
+};
+
+function showStory(id) {
+  const data = stories[id];
+  if (!data) return;
+
+  document.getElementById('placeholder').style.display = 'none';
+
+  const titleEl = document.getElementById('story-title');
+  const textEl  = document.getElementById('story-text');
+
+  titleEl.textContent = data.title;
+  titleEl.style.display = '';
+  textEl.textContent = data.text;
+
+  document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active'));
+  document.querySelector(`.hotspot[data-id="${id}"]`)?.classList.add('active');
+
+  document.querySelectorAll('.place-btn').forEach(b => b.classList.remove('active'));
+  const order = ['carthage','kabylie','luxor','djanet','fez'];
+  const idx = order.indexOf(id);
+  if (idx !== -1) document.querySelectorAll('.place-btn')[idx].classList.add('active');
+}
+</script>
+</body>
+</html>
